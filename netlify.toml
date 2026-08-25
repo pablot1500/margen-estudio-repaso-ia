@@ -13,6 +13,91 @@
   node_bundler = "esbuild"
   external_node_modules = ["@google/genai"]
 
+[[redirects]]
+  from = "/api/auth/login"
+  to = "/.netlify/functions/auth-login"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/logout"
+  to = "/.netlify/functions/auth-logout"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/session"
+  to = "/.netlify/functions/auth-session"
+  status = 200
+
+[[redirects]]
+  from = "/api/health"
+  to = "/.netlify/functions/health"
+  status = 200
+
+[[redirects]]
+  from = "/api/exams/start"
+  to = "/.netlify/functions/exam-start"
+  status = 200
+
+[[redirects]]
+  from = "/api/exams/history"
+  to = "/.netlify/functions/exam-history"
+  status = 200
+
+[[redirects]]
+  from = "/api/exams/skip-follow-up"
+  to = "/.netlify/functions/exam-skip-follow-up"
+  status = 200
+
+[[redirects]]
+  from = "/api/exams/detail/:examId"
+  to = "/.netlify/functions/exam-finish"
+  status = 200
+
+[[redirects]]
+  from = "/api/exams/:examId/answer"
+  to = "/.netlify/functions/exam-answer"
+  status = 200
+
+[[redirects]]
+  from = "/api/materials/upload"
+  to = "/.netlify/functions/materials-upload"
+  status = 200
+
+[[redirects]]
+  from = "/api/materials/item/:id/extract-questions"
+  to = "/.netlify/functions/materials-extract-questions"
+  status = 200
+
+[[redirects]]
+  from = "/api/materials/item/:id"
+  to = "/.netlify/functions/materials-delete"
+  status = 200
+
+[[redirects]]
+  from = "/api/materials"
+  to = "/.netlify/functions/materials-list"
+  status = 200
+
+[[redirects]]
+  from = "/api/questions/progress"
+  to = "/.netlify/functions/question-progress"
+  status = 200
+
+[[redirects]]
+  from = "/api/questions/source-context"
+  to = "/.netlify/functions/question-source-context"
+  status = 200
+
+[[redirects]]
+  from = "/api/subjects/:id"
+  to = "/.netlify/functions/subjects-delete"
+  status = 200
+
+[[redirects]]
+  from = "/api/subjects"
+  to = "/.netlify/functions/subjects"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
