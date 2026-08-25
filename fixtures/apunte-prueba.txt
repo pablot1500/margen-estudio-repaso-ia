@@ -1,0 +1,26 @@
+Clase 1 — Hechos y actos jurídicos
+
+El hecho jurídico es el acontecimiento que, conforme al ordenamiento jurídico, produce el nacimiento, modificación o extinción de relaciones o situaciones jurídicas. Sus efectos pueden producirse con independencia de que hayan sido queridos por una persona.
+
+El acto jurídico es el acto voluntario lícito que tiene por fin inmediato la adquisición, modificación o extinción de relaciones o situaciones jurídicas. Sus elementos esenciales son el sujeto, el objeto y la causa. La forma es esencial cuando la ley exige una solemnidad determinada para la validez del acto.
+
+El objeto debe ser posible, determinado o determinable, lícito y no contrario a la moral, las buenas costumbres ni el orden público. La causa debe existir y ser lícita. La ausencia de un elemento esencial puede producir la nulidad del acto conforme al régimen aplicable.
+
+El error puede viciar la voluntad cuando es esencial y reconocible por el destinatario. Es esencial cuando recae sobre aspectos determinantes del acto. Es reconocible cuando el destinatario pudo advertirlo según las circunstancias de la persona, tiempo y lugar.
+
+# Preguntas
+
+### 1. Conceptos principales
+
+1. ¿Cuál es la diferencia entre un hecho jurídico y un acto jurídico?
+2. ¿Cuáles son los elementos esenciales del acto jurídico y qué consecuencia puede tener la ausencia de uno de ellos?
+
+### 2. Validez y voluntad
+
+1. ¿Qué requisitos debe reunir el error para viciar la voluntad?
+2. ¿Qué condiciones debe cumplir el objeto de un acto jurídico?
+
+### Preguntas integradoras
+
+1. Explique por qué la forma sólo es esencial en determinados actos jurídicos.
+2. Relacione la licitud del objeto y de la causa con la validez del acto jurídico.

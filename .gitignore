@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.netlify/
+.env
+.env.*
+!.env.example
+output/
+.playwright-cli/
+*.log
+.DS_Store
