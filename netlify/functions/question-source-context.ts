@@ -1,11 +1,11 @@
-import type { Config } from '@netlify/functions';
 import { selectStudyContext } from '../lib/contextSelector';
 import { extractSourceFragmentsFromMaterial } from '../lib/gemini';
 import { AppError, json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { isTextQuestionFormat } from '../lib/questionParser';
 import { examsRepo, materialFilesRepo, materialsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['GET']);
   const params = new URL(request.url).searchParams;
   const examId = params.get('examId') || '';
@@ -48,6 +48,4 @@ export default withErrorHandling(async (request) => {
       fragments,
     },
   });
-});
-
-export const config: Config = { path: '/api/questions/source-context' };
+}), '/api/questions/source-context');

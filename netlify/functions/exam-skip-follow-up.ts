@@ -1,10 +1,10 @@
-import type { Config } from '@netlify/functions';
 import { completeExam, toPublicExam } from '../lib/exams';
 import { skipPendingFollowUp } from '../lib/followUp';
 import { AppError, json, method, readJSON, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { examsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['POST']);
   const body = await readJSON<{ examId?: string; questionId?: string }>(request);
   const exam = body.examId ? await examsRepo.get(body.examId) : null;
@@ -21,6 +21,4 @@ export default withErrorHandling(async (request) => {
     completed,
     summary: exam.summary || null,
   });
-});
-
-export const config: Config = { path: '/api/exams/skip-follow-up' };
+}), '/api/exams/skip-follow-up');

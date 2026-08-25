@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
-import type { Config } from '@netlify/functions';
 import type { StudyMaterial } from '../lib/domain';
 import { AppError, json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { materialFilesRepo, materialsRepo, subjectsRepo } from '../lib/storage';
 
 const MAX_BYTES = 4 * 1024 * 1024;
@@ -11,7 +11,7 @@ const SUPPORTED = new Set([
 
 const slug = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 42);
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['POST']);
   const form = await request.formData();
   const file = form.get('file');
@@ -33,6 +33,4 @@ export default withErrorHandling(async (request) => {
   await materialsRepo.set(material);
   await materialFilesRepo.set(id, file);
   return json({ material }, 202);
-});
-
-export const config: Config = { path: '/api/materials/upload' };
+}), '/api/materials/upload');

@@ -1,8 +1,8 @@
-import type { Config } from '@netlify/functions';
 import { json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { examsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['GET']);
   const exams = await examsRepo.list();
   return json({ history: exams.map((exam) => ({
@@ -10,6 +10,4 @@ export default withErrorHandling(async (request) => {
     finalScore: exam.summary?.finalScore ?? exam.finalScore, totalQuestions: exam.totalQuestions, status: exam.status,
     selectedClassNames: exam.selectedClassNames, questionOrder: exam.questionOrder || 'random',
   })).sort((a, b) => b.createdAt.localeCompare(a.createdAt)) });
-});
-
-export const config: Config = { path: '/api/exams/history' };
+}), '/api/exams/history');

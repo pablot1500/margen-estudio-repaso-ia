@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import type { Config } from '@netlify/functions';
 import { AppError, json, method, readJSON, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { subjectsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['GET', 'POST', 'PATCH']);
   if (request.method === 'GET') {
     const subjects = await subjectsRepo.list();
@@ -29,6 +29,4 @@ export default withErrorHandling(async (request) => {
   const subject = { id, name: cleanName, createdAt: new Date().toISOString() };
   await subjectsRepo.set(subject);
   return json({ subject }, 201);
-});
-
-export const config: Config = { path: '/api/subjects' };
+}), '/api/subjects');

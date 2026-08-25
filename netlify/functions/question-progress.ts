@@ -1,9 +1,9 @@
-import type { Config } from '@netlify/functions';
 import { json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { buildValidAnswerCounts, validAnswerCountFor } from '../lib/questionProgress';
 import { examsRepo, questionsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['GET']);
   const subjectId = new URL(request.url).searchParams.get('subjectId') || undefined;
   const [questions, exams] = await Promise.all([questionsRepo.list(subjectId), examsRepo.list()]);
@@ -26,6 +26,4 @@ export default withErrorHandling(async (request) => {
       validAnswerCount: validAnswerCountFor(question, counts),
     }));
   return json({ progress });
-});
-
-export const config: Config = { path: '/api/questions/progress' };
+}), '/api/questions/progress');

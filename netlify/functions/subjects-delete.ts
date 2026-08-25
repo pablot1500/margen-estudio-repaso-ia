@@ -1,9 +1,10 @@
-import type { Config, Context } from '@netlify/functions';
+import type { Context } from '@netlify/functions';
 import { deleteFileSearchStore } from '../lib/gemini';
 import { AppError, json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { examsRepo, materialFilesRepo, materialsRepo, questionsRepo, subjectsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request: Request, context: Context) => {
+export const handler = lambda(withErrorHandling(async (request: Request, context: Context) => {
   method(request, ['DELETE']);
   const subjectId = context.params.id;
   const subject = subjectId ? await subjectsRepo.get(subjectId) : null;
@@ -24,6 +25,4 @@ export default withErrorHandling(async (request: Request, context: Context) => {
   await subjectsRepo.delete(subject.id);
 
   return json({ deleted: true, deletedMaterials: materials.length });
-});
-
-export const config: Config = { path: '/api/subjects/:id' };
+}), '/api/subjects/:id');

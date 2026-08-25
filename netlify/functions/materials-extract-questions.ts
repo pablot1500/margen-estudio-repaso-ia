@@ -1,10 +1,11 @@
 import { randomUUID } from 'node:crypto';
-import type { Config, Context } from '@netlify/functions';
+import type { Context } from '@netlify/functions';
 import { extractQuestionsFromMaterial } from '../lib/gemini';
 import { AppError, json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { materialFilesRepo, materialsRepo, questionsRepo, subjectsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request: Request, context: Context) => {
+export const handler = lambda(withErrorHandling(async (request: Request, context: Context) => {
   method(request, ['POST']);
   const material = context.params.id ? await materialsRepo.get(context.params.id) : null;
   if (!material) throw new AppError('MATERIAL_NOT_FOUND', 'El material ya no existe.', 404);
@@ -71,6 +72,4 @@ export default withErrorHandling(async (request: Request, context: Context) => {
     await materialsRepo.set(material);
     throw error;
   }
-});
-
-export const config: Config = { path: '/api/materials/item/:id/extract-questions' };
+}), '/api/materials/item/:id/extract-questions');

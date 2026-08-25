@@ -1,9 +1,9 @@
-import type { Config } from '@netlify/functions';
 import { startExam, toPublicExam } from '../lib/exams';
 import { AppError, json, method, readJSON, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import type { QuestionOrder } from '../../src/types/domain';
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['POST']);
   const body = await readJSON<{ subjectId?: string; selectedClassIds?: string[]; regenerate?: boolean; questionOrder?: QuestionOrder }>(request);
   if (!body.subjectId) throw new AppError('INVALID_REQUEST', 'Elegí una materia.');
@@ -12,6 +12,4 @@ export default withErrorHandling(async (request) => {
     subjectId: body.subjectId, selectedClassIds: body.selectedClassIds, regenerate: body.regenerate, questionOrder: body.questionOrder,
   });
   return json({ exam: await toPublicExam(exam) }, 201);
-});
-
-export const config: Config = { path: '/api/exams/start' };
+}), '/api/exams/start');

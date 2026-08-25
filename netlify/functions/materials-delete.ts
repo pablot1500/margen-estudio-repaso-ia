@@ -1,9 +1,10 @@
-import type { Config, Context } from '@netlify/functions';
+import type { Context } from '@netlify/functions';
 import { deleteDocument } from '../lib/gemini';
 import { AppError, json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { materialFilesRepo, materialsRepo, questionsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request: Request, context: Context) => {
+export const handler = lambda(withErrorHandling(async (request: Request, context: Context) => {
   method(request, ['DELETE']);
   const id = context.params.id;
   const material = id ? await materialsRepo.get(id) : null;
@@ -13,8 +14,7 @@ export default withErrorHandling(async (request: Request, context: Context) => {
   await materialFilesRepo.delete(material.id);
   await materialsRepo.delete(material.id);
   return json({ deleted: true });
-});
+}), '/api/materials/item/:id');
 
 // Keep item actions below a fixed segment so `/api/materials/upload` can never
 // be interpreted as a material ID by Netlify's route matcher.
-export const config: Config = { path: '/api/materials/item/:id' };

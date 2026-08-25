@@ -1,10 +1,11 @@
-import type { Config, Context } from '@netlify/functions';
+import type { Context } from '@netlify/functions';
 import { evaluateAnswer } from '../lib/gemini';
 import { completeExam, markEvaluation, toPublicExam } from '../lib/exams';
 import { AppError, json, method, readJSON, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { examsRepo, materialFilesRepo, materialsRepo } from '../lib/storage';
 
-export default withErrorHandling(async (request: Request, context: Context) => {
+export const handler = lambda(withErrorHandling(async (request: Request, context: Context) => {
   method(request, ['POST']);
   const exam = context.params.examId ? await examsRepo.get(context.params.examId) : null;
   if (!exam || exam.status !== 'active') throw new AppError('EXAM_NOT_ACTIVE', 'Este examen ya no está activo.', 404);
@@ -47,6 +48,4 @@ export default withErrorHandling(async (request: Request, context: Context) => {
     await examsRepo.set(exam);
   }
   return json({ evaluation: question.evaluation, exam: await toPublicExam(exam), completed, summary: exam.summary || null });
-});
-
-export const config: Config = { path: '/api/exams/:examId/answer' };
+}), '/api/exams/:examId/answer');

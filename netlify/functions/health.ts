@@ -1,9 +1,9 @@
-import type { Config } from '@netlify/functions';
 import { gemini, modelName } from '../lib/gemini';
 import { checkGroqConnection, groqConfigured, groqIsPrimary, groqModelName } from '../lib/groq';
 import { json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['GET']);
   const checkAI = new URL(request.url).searchParams.get('ai') === '1';
   const provider = groqIsPrimary() ? 'groq' : 'gemini';
@@ -14,6 +14,4 @@ export default withErrorHandling(async (request) => {
     status = 'connected';
   }
   return json({ ok: true, provider, status, model: provider === 'groq' ? groqModelName() : modelName(), storage: 'netlify-blobs' });
-});
-
-export const config: Config = { path: '/api/health' };
+}), '/api/health');

@@ -1,11 +1,11 @@
-import type { Config } from '@netlify/functions';
 import { getOperation } from '../lib/gemini';
 import { json, method, withErrorHandling } from '../lib/http';
+import { lambda } from '../lib/lambda';
 import { materialsRepo } from '../lib/storage';
 
 const EXTRACTION_TIMEOUT_MS = 2 * 60 * 1000;
 
-export default withErrorHandling(async (request) => {
+export const handler = lambda(withErrorHandling(async (request) => {
   method(request, ['GET']);
   const subjectId = new URL(request.url).searchParams.get('subjectId') || undefined;
   const materials = await materialsRepo.list(subjectId);
@@ -36,6 +36,4 @@ export default withErrorHandling(async (request) => {
     }
   }));
   return json({ materials: materials.sort((a, b) => b.createdAt.localeCompare(a.createdAt)) });
-});
-
-export const config: Config = { path: '/api/materials' };
+}), '/api/materials');
