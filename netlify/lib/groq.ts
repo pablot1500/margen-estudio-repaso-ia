@@ -22,7 +22,7 @@ export const groqStructured = async <T>(input: {
   repair?: (value: unknown) => unknown;
   maxTokens?: number;
 }) => {
-  await consumePublishedGroqRequest();
+  const apiKey = groqApiKey();
 
   type GroqBody = {
     error?: { message?: string; code?: string; failed_generation?: unknown };
@@ -50,10 +50,13 @@ export const groqStructured = async <T>(input: {
   for (let attempt = 0; attempt < 2; attempt += 1) {
     let response: Response;
     try {
+      // Count each outbound provider call, including a structured-output retry,
+      // so production can never spend more than the published allowance.
+      await consumePublishedGroqRequest();
       response = await fetch(GROQ_ENDPOINT, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${groqApiKey()}`,
+          Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
